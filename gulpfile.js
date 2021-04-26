@@ -23,7 +23,7 @@ const changed = require('gulp-changed');
 const { compareSha1Digest } = require('gulp-changed');
 const rimraf = require('rimraf');
 var ignore = require('gulp-ignore');
-const browsersync = require('browser-sync').create();
+const browserSync = require('browser-sync').create();
 
 var paths = {
   webroot: "./wwwroot/"
@@ -35,9 +35,11 @@ paths.css = paths.webroot + "css/**/*.css";
 paths.less = paths.webroot + "less/site.less";
 paths.lessDest = paths.webroot + "less";
 paths.minCss = paths.webroot + "css/**/*.min.css";
+paths.bootStrapSrc = paths.webroot + "lib/bootstrap/scss/**/*.scss";
 paths.concatJsDest = paths.webroot + "js/site.min.js";
 paths.concatCssDest = paths.webroot + "css/site.min.css";
 paths.concatLessDest = paths.webroot + "less/site.css";
+paths.boostrapDest = paths.webroot + "css/bootstrap";
 
 task("clean:js", function (cb) {
   rimraf(paths.concatJsDest, cb);
@@ -75,6 +77,7 @@ task("less", async function () {
     .pipe(less({
       compress: true
     })).pipe(dest(paths.lessDest));
+  done();
 });
 
 
@@ -85,7 +88,18 @@ task('watch', () => {
 });
 
 
-task('default', function (done) { // <--- Insert `done` as a parameter here...
-  series('clean', 'less', 'min', 'watch'),
-    done(); // <--- ...and call it here.
-})
+task('default',
+    function(done) { // <--- Insert `done` as a parameter here...
+        series('clean', 'less', 'min', 'watch'),
+            done(); // <--- ...and call it here.
+    });
+
+//compile scss into css
+function style() {
+    console.log(paths.boostrapDest);
+    return src(paths.bootStrapSrc)
+        .pipe(sass().on('error', sass.logError))
+        .pipe(dest(paths.boostrapDest))
+        .pipe(browserSync.stream());
+}
+exports.style = style;
