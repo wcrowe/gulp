@@ -90,7 +90,7 @@ task('watch', () => {
 
 task('default',
     function(done) { // <--- Insert `done` as a parameter here...
-        series('clean', 'less', 'min', 'watch'),
+        series('clean', 'less', 'style', 'min', 'watch'),
             done(); // <--- ...and call it here.
     });
 
