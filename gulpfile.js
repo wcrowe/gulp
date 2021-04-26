@@ -37,6 +37,7 @@ paths.lessDest = paths.webroot + "less";
 paths.minCss = paths.webroot + "css/**/*.min.css";
 paths.concatJsDest = paths.webroot + "js/site.min.js";
 paths.concatCssDest = paths.webroot + "css/site.min.css";
+paths.concatLessDest = paths.webroot + "less/site.css";
 
 task("clean:js", function (cb) {
   rimraf(paths.concatJsDest, cb);
@@ -46,7 +47,12 @@ task("clean:css", function (cb) {
   rimraf(paths.concatCssDest, cb);
 });
 
-task("clean", series(["clean:js", "clean:css"]));
+task("clean:less", function (cb) {
+  console.log("Removing " + paths.concatLessDest);
+  rimraf(paths.concatLessDest, cb);
+});
+
+task("clean", series(["clean:js", "clean:css", "clean:less"]));
 
 task("min:js", async function () {
   src([paths.js, "!" + paths.minJs], {
@@ -79,7 +85,7 @@ task('watch', () => {
 });
 
 
-task('default', function(done) { // <--- Insert `done` as a parameter here...
-  series('clean','less', 'min', 'watch'),
-  done(); // <--- ...and call it here.
+task('default', function (done) { // <--- Insert `done` as a parameter here...
+  series('clean', 'less', 'min', 'watch'),
+    done(); // <--- ...and call it here.
 })

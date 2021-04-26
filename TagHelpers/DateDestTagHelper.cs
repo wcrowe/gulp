@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.AspNet.Mvc.Rendering;
-using Microsoft.AspNet.Razor.Runtime.TagHelpers;
+using Microsoft.AspNetCore.Html;
+//using Microsoft.AspNet.Mvc.Rendering;
+//using Microsoft.AspNet.Razor.Runtime.TagHelpers;
+//using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Fritz.Bttf.TagHelpers
 {
@@ -53,12 +56,12 @@ namespace Fritz.Bttf.TagHelpers
 			
 			// Build outer row
 			output.TagName = "div";
-			output.Attributes["class"] = "timeRow";
-			output.TagMode = TagMode.StartTagAndEndTag;
+			output.Attributes.Add(new TagHelperAttribute("class","timeRow"));
+            output.TagMode = TagMode.StartTagAndEndTag;
 			
 			AddTopLabels(output);
 			
-			output.Content.AppendEncoded("<div class=\"row\">");
+			output.Content.AppendHtml("<div class=\"row\">");
 			
 			AddDatePart(output, "month", 3);
 			AddDatePart(output, "day", 1);
@@ -67,7 +70,7 @@ namespace Fritz.Bttf.TagHelpers
 			AddDatePart(output, "hour", 2);
 			AddDatePart(output, "min", 2);
 			
-			output.Content.AppendEncoded("</div>");
+			output.Content.AppendHtml("</div>");
 			
 			AddDateLabel(output);
 			
@@ -83,7 +86,7 @@ namespace Fritz.Bttf.TagHelpers
 			sb.AppendLine("</div>");
 			sb.AppendLine("</div>");
 			
-			output.Content.AppendEncoded(sb.ToString());
+			output.Content.AppendHtml(sb.ToString());
 			
         }
 
@@ -102,7 +105,7 @@ namespace Fritz.Bttf.TagHelpers
 			}
 			sb.AppendLine("</div>");
 			
-			output.Content.AppendEncoded(sb.ToString());
+			output.Content.AppendHtml(sb.ToString());
 			
         }
 
@@ -120,7 +123,7 @@ namespace Fritz.Bttf.TagHelpers
 				<div class=""col-sm-2""><span class=""lbl"">Min</span></div>
 			</div>");
 			
-			output.Content.AppendEncoded(sb.ToString());
+			output.Content.AppendHtml(sb.ToString());
 			
         }
     }
